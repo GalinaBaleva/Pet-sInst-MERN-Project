@@ -79,17 +79,17 @@ export const login = async (req, res) => {
     }
 }
 
-export const logout = async(req, res) => {
+export const logout = async (req, res) => {
     req.session.destroy();
     res.status(200).send('');
 }
 
-export const checkauth = async(req, res) => {
-    if(req.session.logged){
+export const checkauth = async (req, res) => {
+    if (req.session.logged) {
         res.status(200).send(req.session.username);
-    }else {
-        rew.status(401).send('');
-    } 
+    } else {
+        res.status(401).send('');
+    }
 }
 
 
