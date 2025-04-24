@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
-import Home from './components/Home';
+import Home from './pages/Home';
+import SingUp from './pages/SingUp';
 
 function App() {
 
@@ -36,11 +37,21 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navigation isLogged={login}/>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='*' element={<Navigate to="/" />} />
-        </Routes>
+        <Navigation isLogged={login} />
+        <main>
+          <Routes>
+            {!login
+              ? <>
+                <Route path='/singup' element={<SingUp />} />
+              </>
+              :
+              <>
+              </>
+            }
+            <Route path='/' element={<Home />} />
+            <Route path='*' element={<Navigate to="/" />} />
+          </Routes>
+        </main>
         <Footer />
       </BrowserRouter>
     </>
