@@ -1,0 +1,12 @@
+.sing-form {
+    min-width: 40%;
+    margin: 0 auto;
+    padding: 3em;
+}
+
+fieldset{
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+
+}
