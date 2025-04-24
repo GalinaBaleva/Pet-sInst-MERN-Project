@@ -1,0 +1,142 @@
+header {
+    background: white;
+    font-size: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+    padding: 1em 2em;
+  }
+  
+  
+  .site-header .header-first {
+    display: flex;
+    justify-content: center;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  
+  .header-first .logo {
+    text-shadow: 0.1em 0.05em #d6cfcf;
+  }
+  
+  .navbar-closed {
+    color: black;
+  }
+  
+  .navbar-closed i {
+    padding-top: 0.7em;
+  }
+  
+  
+  .inactive {
+    display: none
+  }
+  
+  .active {
+    position: absolute;
+    top: 4.5em;
+    left: 0;
+    opacity: 0.92;
+    width: 100%;
+  }
+  
+  .active li a {
+    padding: 1em 0;
+  }
+  
+  
+  .nav-list-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 0.2em;
+  }
+  
+  .navbar ul li {
+    display: block;
+    list-style: none outside;
+    border-radius: 0.2em;
+  }
+  
+  .nav-list-items li a {
+    display: block;
+    max-width: 100%;
+    text-align: cennter;
+    background: #eeeaea;
+    color: black;
+    border-radius: 0.2em;
+    padding: 0.5em 0;
+    font-weight: bold;
+    font-size: 13px;
+    text-shadow: 0.9px 0.9px #d6cfcf;
+  }
+  
+  
+  @media (min-width: 450px) {
+    header {
+      font-size: 1.6em;
+    }
+  }
+  
+  
+  @media(min-width:710px) {
+    .site-header {
+      font-size: inherit;
+    }
+  
+    .site-header {
+      padding: 3em 2em 1em;
+      gap: 10%;
+    }
+  
+    .header-first {
+      flex: 1 1 25%;
+    }
+  
+    .header-second {
+      flex: 1 1 60%;
+      position: relative;
+    }
+  
+    .navbar-closed {
+      display: none;
+    }
+  
+    .inactive {
+      display: block;
+    }
+  
+    .active {
+      position: static;
+      top: 4.5em;
+      left: 2em;
+      opacity: 0.92;
+      width: 85%;
+    }
+  
+    .nav-list-items {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  
+    .nav-list-items li a {
+      background-color: white;
+      padding: 0.2em;
+    }
+  }
+  
+  @media(min-width:1000px) {
+    .site-header {
+      font-size: 1.5em;
+      padding: 0.3em 2em;
+    }
+  
+    .nav-list-items li a {
+      padding: 1em;
+      font-size: 1em;
+    }
+  }

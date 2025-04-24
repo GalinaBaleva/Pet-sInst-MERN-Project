@@ -1,0 +1,34 @@
+.hero {
+    height: 40em;
+    position: relative;
+}
+
+.hero-wrapper {
+    background: black;
+    background-image: url(pexels-lum3n-44775-406014.jpg);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    background-position-y: bottom;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.hero-wrapper h1 {
+    color: #ffffff;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+@media (min-width:1000px) {
+    .hero{
+        margin: 0 auto;
+        max-width: 90%;
+    }
+    .hero-wrapper {
+        align-items: center;
+    }
+
+
+}
