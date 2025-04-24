@@ -1,0 +1,8 @@
+POST /
+Host: http://localhost:6001/user/singup
+Content-Type: 'application/json' 
+
+{
+    "username": "bob@aol.com",
+    "password": "Trustno1"
+}
