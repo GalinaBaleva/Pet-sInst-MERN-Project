@@ -1,5 +1,6 @@
 import session from 'express-session';
 import mongoose from "mongoose";
+import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import GooleStrategy from 'passport-google-oauth20';
