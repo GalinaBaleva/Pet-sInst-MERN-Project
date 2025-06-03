@@ -21,7 +21,16 @@ try {
 }
 
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://kit.fontawesome.com"],
+      connectSrc: ["'self'", "https://pet-sinst-mern-project.onrender.com"],
+      imgSrc: ["'self'", "https://res.cloudinary.com", "data:"],
+    },
+  },
+}));
 app.use(cors({
     origin: true,
     credentials: true
@@ -43,3 +52,5 @@ app.use(urlencoded({ extended: true }))
 
 app.use('/user', userRoutes);
 app.use('/posts', postsRoutes);
+
+// app.get('*',)
