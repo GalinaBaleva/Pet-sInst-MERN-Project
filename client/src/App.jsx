@@ -7,9 +7,16 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import SingUp from './pages/SingUp';
+import SingIn from './pages/SingIn';
+import Catalog from './pages/Catalog';
+import NewPost from './pages/NewPost';
+import EditPost from './pages/EditPost';
+import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
+import { useState } from 'react';
 
 function App() {
-
+  const [authCheckecked, setAuthCheckecked] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -20,19 +27,22 @@ function App() {
         });
         if (response.status === 200) {
           let data = await response.json();
-          console.log(data);
-          dispatch({ type: 'login', username: data.username });
+
+          dispatch({ type: 'login', username: data.username, userid: data.userid });
         } else {
           console.log('nicht eingeloggt');
         }
       } catch (err) {
         console.log(err);
+      } finally {
+        setAuthCheckecked(true);
       }
     }
     fetchData();
   }, []);
 
   const login = useSelector(state => state.login);
+  if (!authCheckecked) return <div>Loading...</div>;
 
   return (
     <>
@@ -40,12 +50,19 @@ function App() {
         <Navigation isLogged={login} />
         <main>
           <Routes>
+            <Route path='/catalog' element={<Catalog />} />
             {!login
-              ? <>
+              ?
+              <>
                 <Route path='/singup' element={<SingUp />} />
+                <Route path='/login' element={<SingIn />} />
               </>
               :
               <>
+                <Route path='/new-post' element={<NewPost />} />
+                <Route path='/edit' element={<EditPost />} />
+                <Route path='/profile' element={<Profile />} />
+                <Route path='/edit-profile' element={<EditProfile />} />
               </>
             }
             <Route path='/' element={<Home />} />

@@ -1,5 +1,5 @@
 import Hero from "../components/Hero/Hero"
-import Top from "../components/Top/Top"
+import Top from "../components/Top"
 
 const Home = () => {
     return (

@@ -1,0 +1,33 @@
+.profile-info {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 40%;
+    padding: 1em
+}
+
+
+.user-image {
+    max-width: 40%;
+}
+
+.user-image img {
+    object-fit: cover;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+@media (min-width:900px) {
+    .profile-info {
+        padding: 2em
+    }
+
+    .user-image {
+        max-width: 20%;
+    }
+}

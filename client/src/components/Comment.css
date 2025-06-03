@@ -1,0 +1,7 @@
+.comment {
+    box-shadow: 0 0 1em 0 rgb(0, 0, 0, 0.1);
+}
+
+.post-comment-ouner {
+    font-weight: bold;
+}

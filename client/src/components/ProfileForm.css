@@ -1,0 +1,65 @@
+.profile-form {
+    display: flex;
+    width: 90%;
+    margin: 3em;
+    box-shadow: 0 1em 1em 0 rgb(0, 0, 0, 0.2);
+    flex-direction: column;
+}
+
+.profile-form legend {
+    flex: 100%;
+    align-items: center;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.form-wrapper input {
+    flex: 1 1 60%;
+    box-shadow: 0 1em 1em 1em rgb(0, 0, 0, 0.1);
+}
+
+.form-wrapper input:focus {
+    outline: none;
+    border: none;
+}
+
+.form-wrapper button {
+    width: 100%;
+    background-color: rgb(51, 87, 255);
+    color: white;
+    border: none;
+    padding: 0.9em;
+}
+
+.spinner-profile-edit {
+    max-width: 20%;
+    margin: 0 auto;
+}
+
+
+@media (min-width: 600px) {
+    .profile-form {
+        width: 80%;
+    }
+}
+@media (min-width: 850px) {
+    .profile-form {
+        width: 50%;
+    }
+}
+
+@media (min-width: 900px) {
+    .form-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 0;
+    }
+
+    .form-wrapper button {
+        flex: 1 1 20%;
+    }
+}

@@ -1,0 +1,34 @@
+.sections-wrapper {
+    margin: 0 auto;
+    width: 100%;
+    padding: 2em 3em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+
+}
+
+.top h2 {
+    padding: 1em 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.top-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.all {
+    margin: 0 auto;
+    text-align: center;
+    color: black;
+    text-decoration: underline;
+    border: none;
+    background-color: white;
+}
+
+

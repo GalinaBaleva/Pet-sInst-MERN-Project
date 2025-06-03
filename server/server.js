@@ -1,10 +1,11 @@
-import express from 'express';
+import express, { urlencoded } from 'express';
+import session from 'express-session';
 import helmet from 'helmet';
 import cors from 'cors';
 
-
 import * as db from './utils/db.js'
 import userRoutes from './user/router.js'
+import postsRoutes from './posts/router.js'
 import { enableSessions } from './utils/auth.js';
 
 
@@ -25,6 +26,9 @@ app.use(cors({
     origin: true,
     credentials: true
 }));
+app.use(express.static('react'));
+app.use(enableSessions());
+
 
 app.use(
     (req, res, next) => {
@@ -34,6 +38,8 @@ app.use(
 );
 
 app.use(express.json());
-app.use(enableSessions());
+app.use(urlencoded({ extended: true }))
 
-app.use('/user', userRoutes)
+
+app.use('/user', userRoutes);
+app.use('/posts', postsRoutes);

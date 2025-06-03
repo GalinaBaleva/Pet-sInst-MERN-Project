@@ -1,4 +1,4 @@
-.sing-form {
+.create-edite-form {
     min-width: 40%;
     margin: 3em;
 }
@@ -44,6 +44,10 @@ input {
     padding: 1em;
 }
 
+textarea{
+    padding: 1em;
+}
+
 .auth-form-button {
     background-color: rgb(51, 87, 255);
     color: white;
@@ -52,20 +56,14 @@ input {
     font-size: 1.1em;
 }
 
-.error-sing-form-inactive {
+.error-create-edite-form-inactive {
     display: none;
 }
 
-.error-sing-form-active {
+.error-create-edite-form-active {
     color: red;
     display: flex;
     justify-content: flex-start;
     gap: 0.5em;
     align-items: center;
-}
-
-@media(min-width:700px) {
-    .sing-form {
-        max-width: 40%;
-    }
 }

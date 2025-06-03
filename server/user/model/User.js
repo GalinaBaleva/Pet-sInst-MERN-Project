@@ -13,17 +13,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    userimage:{
+        type: String,
+        required: true,
+    },
+    userimgid: {
+        type: String,
+        required: true,
+    },
     session: {
         type: String
     }
 });
-
-UserSchema.virtual('repeatPassword').
-    set(function (value) {
-        if (this.password !== value) {
-            throw new Error('Password missmatch!');
-        }
-    });
 
 // User.create() -> pre('save') -> insertOne()
 UserSchema.pre('save', async function () {
