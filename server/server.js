@@ -21,16 +21,37 @@ try {
 }
 
 
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://kit.fontawesome.com"],
-      connectSrc: ["'self'", "https://pet-sinst-mern-project.onrender.com"],
-      imgSrc: ["'self'", "https://res.cloudinary.com", "data:"],
-    },
-  },
-}));
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: [
+                    "'self'",
+                    "https://kit.fontawesome.com",
+                ],
+                styleSrc: [
+                    "'self'",
+                    "'unsafe-inline'", // Required for some FontAwesome styles
+                    "https://kit-free.fontawesome.com",
+                    "https://ka-f.fontawesome.com"
+                ],
+                fontSrc: [
+                    "'self'",
+                    "https://ka-f.fontawesome.com"
+                ],
+                connectSrc: [
+                    "'self'",
+                    "https://kit.fontawesome.com",
+                    "https://ka-f.fontawesome.com",
+                    "https://pet-sinst-mern-project.onrender.com"
+                ],
+                imgSrc: ["'self'", "https://res.cloudinary.com", "data:"],
+                objectSrc: ["'none'"]
+            },
+        },
+    })
+);
 app.use(cors({
     origin: true,
     credentials: true
