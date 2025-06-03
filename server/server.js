@@ -23,31 +23,35 @@ try {
 
 app.use(
     helmet({
-  contentSecurityPolicy: {
-    useDefaults: true,
-    directives: {
-      "default-src": ["'self'", "https://pet-sinst-mern-project.onrender.com"],
-      "script-src": ["'self'", "'unsafe-inline'", "https://kit.fontawesome.com"],
-      "style-src": [
-        "'self'",
-        "'unsafe-inline'",
-        "https://fonts.googleapis.com",
-        "https://kit-free.fontawesome.com",
-        "https://ka-f.fontawesome.com"
-      ],
-      "font-src": [
-        "'self'",
-        "https://fonts.gstatic.com",
-        "https://ka-f.fontawesome.com"
-      ],
-      "connect-src": [
-        "'self'",
-        "https://pet-sinst-mern-project.onrender.com"
-      ]
-    }
-  }
-}));
-
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: [
+                    "'self'",
+                    "https://kit.fontawesome.com",
+                ],
+                styleSrc: [
+                    "'self'",
+                    "'unsafe-inline'", // Required for some FontAwesome styles
+                    "https://kit-free.fontawesome.com",
+                    "https://ka-f.fontawesome.com"
+                ],
+                fontSrc: [
+                    "'self'",
+                    "https://ka-f.fontawesome.com"
+                ],
+                connectSrc: [
+                    "'self'",
+                    "https://kit.fontawesome.com",
+                    "https://ka-f.fontawesome.com",
+                    "https://pet-sinst-mern-project.onrender.com"
+                ],
+                imgSrc: ["'self'", "https://res.cloudinary.com", "data:"],
+                objectSrc: ["'none'"]
+            },
+        },
+    })
+);
 app.use(cors({
     origin: true,
     credentials: true
