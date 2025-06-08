@@ -29,6 +29,8 @@ app.use(
                 scriptSrc: [
                     "'self'",
                     "https://kit.fontawesome.com",
+                    "https://ka-f.fontawesome.com",
+                    "https://pet-sinst-mern-project.onrender.com"
                 ],
                 styleSrc: [
                     "'self'",
@@ -38,7 +40,8 @@ app.use(
                 ],
                 fontSrc: [
                     "'self'",
-                    "https://ka-f.fontawesome.com"
+                    "https://ka-f.fontawesome.com",
+                    "https://kit-free.fontawesome.com https://ka-f.fontawesome.com"
                 ],
                 connectSrc: [
                     "'self'",
