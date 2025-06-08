@@ -28,27 +28,23 @@ app.use(
                 defaultSrc: ["'self'"],
                 scriptSrc: [
                     "'self'",
-                    "style-src 'self' 'unsafe-inline' https://kit-free.fontawesome.com https://ka-f.fontawesome.com",
                     "https://kit.fontawesome.com",
-                    "https://ka-f.fontawesome.com",
-                    "https://pet-sinst-mern-project.onrender.com"
                 ],
                 styleSrc: [
                     "'self'",
-                    "style-src 'self' 'unsafe-inline' https://kit-free.fontawesome.com https://ka-f.fontawesome.com",
                     "'unsafe-inline'", // Required for some FontAwesome styles
                     "https://kit-free.fontawesome.com",
-                    "https://ka-f.fontawesome.com"
+                    "https://ka-f.fontawesome.com",
+                    "https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap"
                 ],
                 fontSrc: [
                     "'self'",
-                    "style-src 'self' 'unsafe-inline' https://kit-free.fontawesome.com https://ka-f.fontawesome.com",
                     "https://ka-f.fontawesome.com",
-                    "https://kit-free.fontawesome.com https://ka-f.fontawesome.com"
+                    "https://kit-free.fontawesome.com https://ka-f.fontawesome.com",
+                    "https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap"
                 ],
                 connectSrc: [
                     "'self'",
-                    "style-src 'self' 'unsafe-inline' https://kit-free.fontawesome.com https://ka-f.fontawesome.com",
                     "https://kit.fontawesome.com",
                     "https://ka-f.fontawesome.com",
                     "https://pet-sinst-mern-project.onrender.com"
