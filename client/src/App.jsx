@@ -29,8 +29,6 @@ function App() {
           let data = await response.json();
 
           dispatch({ type: 'login', username: data.username, userid: data.userid });
-        } else {
-          console.log('nicht eingeloggt');
         }
       } catch (err) {
         console.log(err);

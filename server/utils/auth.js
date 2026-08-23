@@ -30,7 +30,7 @@ function enableSessions() {
 passport.serializeUser(({ _id }, done) => done(null, { _id }));
 
 passport.deserializeUser(async ({ _id }, done) => {
-    const user = await getUser(new mongoose.Types.ObjectId({ _id }));
+    const user = await getUser(new mongoose.Types.ObjectId(_id));
 
     done(null, user);
 });

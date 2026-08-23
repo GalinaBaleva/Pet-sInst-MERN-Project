@@ -16,7 +16,6 @@ const authReducer = (state = initialState, action) => {
             // localStorage.removeItem( 'login' );
             return { ...state, login: false, username: '', userid: '' }
         case 'update':
-            console.log(state)
             return { ...state, lastchange: new Date() }
         default:
             return { ...state }

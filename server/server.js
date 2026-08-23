@@ -2,6 +2,10 @@ import express, { urlencoded } from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import * as db from './utils/db.js'
 import userRoutes from './user/router.js'
@@ -17,7 +21,7 @@ try {
     app.listen(PORT, () => console.log(`Server is listenig on: http://localhost:${PORT}`));
 
 } catch (error) {
-    console.log('Mongo DB Error', err);
+    console.log('Mongo DB Error', error);
 }
 
 
@@ -32,16 +36,16 @@ app.use(
                 ],
                 styleSrc: [
                     "'self'",
-                    "'unsafe-inline'", // Required for some FontAwesome styles
+                    "'unsafe-inline'",
                     "https://kit-free.fontawesome.com",
                     "https://ka-f.fontawesome.com",
-                    "https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap"
+                    "https://fonts.googleapis.com",
                 ],
                 fontSrc: [
                     "'self'",
                     "https://ka-f.fontawesome.com",
-                    "https://kit-free.fontawesome.com https://ka-f.fontawesome.com",
-                    "https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap"
+                    "https://kit-free.fontawesome.com",
+                    "https://fonts.gstatic.com",
                 ],
                 connectSrc: [
                     "'self'",
@@ -77,4 +81,6 @@ app.use(urlencoded({ extended: true }))
 app.use('/user', userRoutes);
 app.use('/posts', postsRoutes);
 
-// app.get('*',)
+app.get('/{*path}', (req, res) => {
+    res.sendFile(path.join(__dirname, 'react', 'index.html'));
+});

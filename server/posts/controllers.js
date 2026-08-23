@@ -101,9 +101,9 @@ export const getToEditPost = async (req, res) => {
 
     res.status(200).send(post);
 
-  } catch (Error) {
+  } catch (err) {
     console.log(err);
-    res.status(500).send({ message: err });
+    res.status(500).send({ message: err.message });
   }
 }
 
@@ -112,7 +112,7 @@ export const editPost = async (req, res) => {
     const { id } = req.params;
     const post = await Post.findById({ _id: id });
     if (!post) {
-      return res.status(404).send({ messsage: 'Post not fount' });
+      return res.status(404).send({ message: 'Post not found' });
     }
 
     if (post.userid.toString() !== req.session.userid.toString()) {
@@ -288,6 +288,6 @@ export const getAllComments = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    req.status(500).send({ message: err.message });
+    res.status(500).send({ message: err.message });
   }
 }

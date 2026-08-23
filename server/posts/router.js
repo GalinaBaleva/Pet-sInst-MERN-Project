@@ -8,7 +8,7 @@ const checkauth = async (req, res, next) => {
     if (req.session.userid) {
         next();
     } else {
-        res.status(404).send({ message: 'You are not logged in!' })
+        res.status(401).send({ message: 'You are not logged in!' })
     }
 }
 
