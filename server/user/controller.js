@@ -47,8 +47,8 @@ export const add = async (req, res) => {
             return;
         }
 
-        if (password.length < 4) {
-            res.status(404).send({ message: 'Password is to short' });
+        if (password.length < 8) {
+            res.status(400).send({ message: 'Password must be at least 8 characters' });
             return;
         } else if (password.length > 30) {
             res.status(404).send({ message: 'Password is to long' });
@@ -135,8 +135,8 @@ export const changeProfilePassword = async (req, res) => {
                 return res.status(404).send({ message: 'Old password mismatch!' });
             }
 
-            if (newpassword.length < 4) {
-                res.status(404).send({ message: 'Password is to short' });
+            if (newpassword.length < 8) {
+                res.status(400).send({ message: 'Password must be at least 8 characters' });
                 return;
 
             } else if (newpassword.length > 30) {
@@ -145,8 +145,7 @@ export const changeProfilePassword = async (req, res) => {
             }
 
             user.password = newpassword;
-            await user.save()
-            console.log(user)
+            await user.save();
             res.status(200).send({ message: 'Password is successfully changed!' })
         } else {
             return res.status(404).send({ message: 'You don\'t have permission to change this password' })
@@ -173,13 +172,10 @@ export const changeProfileImage = async (req, res) => {
                 await cloudinary.uploader.destroy(user.userimgid);
             };
 
-            const usernew = await User.findByIdAndUpdate(id, {
+            await User.findByIdAndUpdate(id, {
                 userimage: result.url,
                 userimgid: result.public_id
-            },
-                { new: true });
-
-            console.log(usernew)
+            });
 
             res.status(200).send({ message: 'Image is successfully changed!' });
         } else {

@@ -17,14 +17,9 @@ const Profile = () => {
     const [totalPostsCount, setTotalPostsCount] = useState('');
     const [hasMore, setHasMore] = useState(true);
     const lacation = useLocation('');
+    const sessionUserId = useSelector(state => state.userid);
 
-    let currrentId;
-
-    if (!lacation.state) {
-        currrentId = useSelector(state => state.userid)
-    } else {
-        currrentId = lacation.state.userid;
-    }
+    const currrentId = lacation.state ? lacation.state.userid : sessionUserId;
 
 
     useEffect(() => {

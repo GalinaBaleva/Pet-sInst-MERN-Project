@@ -1,39 +1,28 @@
 import session from 'express-session';
 import mongoose from "mongoose";
 import MongoStore from 'connect-mongo';
-import passport from 'passport';
-import LocalStrategy from 'passport-local';
-import GooleStrategy from 'passport-google-oauth20';
 import { getUser } from '../user/controller.js';
 
-function enableSessions() {
+const isProd = process.env.NODE_ENV === 'production';
 
-    return (session({
+function enableSessions() {
+    return session({
         secret: process.env.SESSION_SECRET,
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         store: MongoStore.create({
             mongoUrl: process.env.DB_URL,
             dbName: process.env.DB_NAME,
-            ttl: 60 * 15, // 15 minutes
+            ttl: 60 * 15,
             autoRemove: 'native'
         }),
         cookie: {
-            secure: false,
+            secure: isProd,
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: isProd ? 'none' : 'lax',
             maxAge: 15 * 60 * 1000
         }
-    }));
+    });
 }
 
-passport.serializeUser(({ _id }, done) => done(null, { _id }));
-
-passport.deserializeUser(async ({ _id }, done) => {
-    const user = await getUser(new mongoose.Types.ObjectId(_id));
-
-    done(null, user);
-});
-
 export { enableSessions };
-

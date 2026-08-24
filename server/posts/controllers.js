@@ -247,8 +247,16 @@ export const getProfile = async (req, res) => {
 };
 
 export const postComment = async (req, res) => {
-  const { postId, commentUser, commentUserId, comment } = req.body;
-  console.log(postId, commentUser, commentUserId, comment)
+  const { postId, comment } = req.body;
+  const commentUserId = req.session.userid;
+  const commentUser = req.session.username;
+
+  if (!comment || typeof comment !== 'string' || comment.trim().length === 0) {
+    return res.status(400).send({ message: 'Comment cannot be empty' });
+  }
+  if (comment.length > 500) {
+    return res.status(400).send({ message: 'Comment is too long (max 500 characters)' });
+  }
 
   try {
     const post = await Post.findById(postId);
@@ -258,7 +266,7 @@ export const postComment = async (req, res) => {
     post.comments.push({
       commentuserid: commentUserId,
       commentusersname: commentUser,
-      comment: comment,
+      comment: comment.trim(),
       commentDate: Date.now()
     });
 
