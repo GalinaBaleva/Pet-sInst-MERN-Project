@@ -14,14 +14,6 @@ const app = express();
 const isProd = process.env.NODE_ENV === 'production';
 const { PORT } = process.env;
 
-try {
-    await db.connect();
-    app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
-} catch (error) {
-    console.error('MongoDB connection error:', error.message);
-    process.exit(1);
-}
-
 app.use(
     helmet({
         contentSecurityPolicy: {
@@ -91,3 +83,11 @@ export const commentLimiter = rateLimit({
 
 app.use('/user', userRoutes);
 app.use('/posts', postsRoutes);
+
+try {
+    await db.connect();
+    app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+} catch (error) {
+    console.error('MongoDB connection error:', error.message);
+    process.exit(1);
+}

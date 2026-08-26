@@ -16,6 +16,8 @@ dist
 dist-ssr
 *.local
 
+BUGFIX_CHECKLIST.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
