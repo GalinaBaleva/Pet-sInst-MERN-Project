@@ -8,7 +8,7 @@ export const getUser = async (req, res) => {
     try {
         const _id = req.query.userid;
 
-        const user = await User.findById({ _id: _id });
+        const user = await User.findById(_id);
 
         if (!user) {
             return res.status(404).send({ message: 'User not found!' })

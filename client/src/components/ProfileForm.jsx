@@ -27,9 +27,9 @@ const ProfileForm = (props) => {
         formData.append('id', props._id);
 
         if (input === 'oldpassword') {
-            if (passwords.newpassword.length < 4 || passwords.oldpassword.length < 4) {
+            if (passwords.newpassword.length < 8 || passwords.oldpassword.length < 8) {
                 setSpinner(false);
-                setErrMessage('Password is too short');
+                setErrMessage('Password must be at least 8 characters');
                 return;
             }
             if (passwords.newpassword.length > 30 || passwords.oldpassword.length > 30) {

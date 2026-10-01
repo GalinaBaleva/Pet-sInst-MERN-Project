@@ -60,6 +60,7 @@ export const getTopPosts = async (req, res) => {
 }
 
 export const createNewPost = async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'Image is required' });
   try {
     const result = await cloudinary.uploader.upload(req.file.path);
     await Post.create({
@@ -102,7 +103,7 @@ export const getToEditPost = async (req, res) => {
 export const editPost = async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await Post.findById({ _id: id });
+    const post = await Post.findById(id);
     if (!post) {
       return res.status(404).send({ message: 'Post not found' });
     }
@@ -280,7 +281,7 @@ export const postComment = async (req, res) => {
 export const getAllComments = async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await Post.findById({ _id: id });
+    const post = await Post.findById(id);
 
     if (!post) {
       return res.status(404).send({ message: 'Post not found' });

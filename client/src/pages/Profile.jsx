@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 
 
 const Profile = () => {
-    const [user, setUser] = useState('');
+    const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
 
@@ -73,9 +73,9 @@ const Profile = () => {
     return (
         <>
             <UserInfo
-                _id={user._id}
-                username={user.username}
-                userimage={user.userimage}
+                _id={user?._id}
+                username={user?.username}
+                userimage={user?.userimage}
                 isOwner={isOwner}
                 postCount={totalPostsCount}
             />
@@ -103,8 +103,8 @@ const Profile = () => {
                                 likes={p.likes}
                                 name={p.name}
                                 userid={p.userid}
-                                username={user.username}
-                                userimage={user.userimage}
+                                username={user?.username}
+                                userimage={user?.userimage}
                                 date={p.date}
                                 likedBy={p.likedBy}
                                 liked={p.liked}
