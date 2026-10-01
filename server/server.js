@@ -14,7 +14,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const isProd = process.env.NODE_ENV === 'production';
-const { PORT } = process.env;
+const PORT = process.env.PORT || 3000;
 
 app.use(
     helmet({
