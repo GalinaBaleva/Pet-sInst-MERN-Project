@@ -13,7 +13,7 @@ const fetchData = async (method, path, body) => {
     try {
         const response = await fetch(host + path, options);
 
-        if (response.status !== 200) {
+        if (!response.ok) {
             const error = await response.json();
             throw new Error(error.message);
         }
@@ -23,7 +23,7 @@ const fetchData = async (method, path, body) => {
         return { status: response.status, data };
 
     } catch (error) {
-        return error.message
+        return { status: null, error: error.message, data: null };
     };
 }
 

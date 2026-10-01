@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 import TopCard from './TopCard.jsx';
 
 const Top = () => {
-    const [posts, setPosts] = useState('');
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
         get('/posts/top')
             .then(r => {
                 if (r.status !== 200) {
-                    return console.log(r.message);
+                    return console.log(r.error);
                 }
 
                 setPosts(r.data);

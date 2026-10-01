@@ -27,10 +27,10 @@ const Navigation = (props) => {
     }
 
     useEffect(() => {
-        document.addEventListener('scroll', () => {
-            setClosedNavIcon(true);
-        })
-    }, [])
+        const handler = () => setClosedNavIcon(true);
+        document.addEventListener('scroll', handler);
+        return () => document.removeEventListener('scroll', handler);
+    }, []);
 
     return (
         <>
@@ -62,7 +62,7 @@ const Navigation = (props) => {
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to='/singup'
+                                        <NavLink to='/signup'
                                             onClick={closeNavHandler}
                                         >Register
                                         </NavLink>
@@ -83,11 +83,11 @@ const Navigation = (props) => {
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink
-                                            to='/logout'
+                                        <button
+                                            className="nav-logout-btn"
                                             onClick={clickHandler}
                                         >Logout
-                                        </NavLink>
+                                        </button>
                                         <div className="users-greeting no-mobile">Hallo {user}</div>
                                     </li>
                                 </>

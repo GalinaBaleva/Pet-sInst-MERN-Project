@@ -6,8 +6,8 @@ import { useEffect } from 'react';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import SingUp from './pages/SingUp';
-import SingIn from './pages/SingIn';
+import SignUp from './pages/SignUp';
+import SignIn from './pages/SignIn';
 import Catalog from './pages/Catalog';
 import NewPost from './pages/NewPost';
 import EditPost from './pages/EditPost';
@@ -52,8 +52,8 @@ function App() {
             {!login
               ?
               <>
-                <Route path='/singup' element={<SingUp />} />
-                <Route path='/login' element={<SingIn />} />
+                <Route path='/signup' element={<SignUp />} />
+                <Route path='/login' element={<SignIn />} />
               </>
               :
               <>

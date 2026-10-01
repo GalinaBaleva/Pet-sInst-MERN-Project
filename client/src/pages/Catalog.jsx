@@ -12,22 +12,15 @@ const Catalog = () => {
 
 
     const likesClickHandler = async (_id) => {
-        try {
-            const response = await post('/posts/like/', { _id });
-            const { liked, likes } = response.data;
-            console.log(response)
+        const response = await post('/posts/like/', { _id });
+        if (response.error || !response.data) return;
+        const { liked, likes } = response.data;
 
-            setPosts(prevPosts =>
-                prevPosts.map(
-                    post => post._id === _id
-                        ? { ...post, likes, liked }
-                        : post
-                )
-            );
-
-        } catch (err) {
-            console.log("Error liking, err");
-        }
+        setPosts(prevPosts =>
+            prevPosts.map(
+                p => p._id === _id ? { ...p, likes, liked } : p
+            )
+        );
     }
 
     useEffect(() => {
@@ -35,31 +28,31 @@ const Catalog = () => {
 
     }, []);
 
-    const fetchData = async (pageToLoad) => {
+    const fetchData = async (pageToLoad, reset = false) => {
         try {
             const response = await get(`/posts/catalog?page=${pageToLoad}`);
             const newPosts = response.data.posts;
             const totalPages = response.data.totalPages;
 
             setPosts(prevPosts => {
-                const allPosts = [...prevPosts, ...newPosts];
-
-                const uniquePost = Array.from(new Map(allPosts.map(post => [post._id, post])).values());
-                return uniquePost;
+                const base = reset ? [] : prevPosts;
+                const allPosts = [...base, ...newPosts];
+                return Array.from(new Map(allPosts.map(p => [p._id, p])).values());
             });
 
             setTotalPostsCount(response.data.totalPostsCount);
-
             setHasMore(pageToLoad < totalPages);
             setcurrentPage(pageToLoad + 1);
 
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
     }
 
     const afterDeleteHandler = async () => {
-        get('/posts/catalog').then(response => setPosts(response.data.posts));
+        setcurrentPage(1);
+        setHasMore(true);
+        fetchData(1, true);
     }
 
     return (

@@ -9,6 +9,7 @@ const PostForm = (props) => {
     description: '',
   });
   const [spinner, setSpinner] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (props.name && props.description) {
@@ -30,11 +31,14 @@ const PostForm = (props) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setSpinner(true);
+    setError('');
 
     const formData = new FormData();
     formData.append('name', textFields.name);
     formData.append('description', textFields.description);
-    formData.append('image', textFields.image);
+    if (textFields.image) {
+      formData.append('image', textFields.image);
+    }
 
     try {
       const response = await fetch(import.meta.env.VITE_API_URL + props.path, {
@@ -45,11 +49,18 @@ const PostForm = (props) => {
 
       const result = await response.json();
       setSpinner(false);
+
+      if (!response.ok) {
+        setError(result.message || result.error || 'Something went wrong');
+        return;
+      }
+
       navigate('/catalog');
 
     } catch (err) {
       setSpinner(false);
       console.error('Error uploading:', err);
+      setError('Network error, please try again');
     }
   };
 
@@ -76,7 +87,7 @@ const PostForm = (props) => {
                 type="file"
                 name="image"
                 onChange={changeHandler}
-                required
+                required={props.action !== 'edit'}
               />
             </div>
             <textarea
@@ -86,6 +97,7 @@ const PostForm = (props) => {
               onChange={changeHandler}
               required
             />
+            {error && <p style={{ color: 'red', margin: '8px 0 0' }}>{error}</p>}
             <button className="auth-form-button" type="submit">
               {props.button}
             </button>

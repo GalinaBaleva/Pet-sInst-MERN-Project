@@ -5,23 +5,25 @@ import { get } from "../shared/utils/api";
 
 const EditPost = () => {
     const location = useLocation();
-    const [post, setPost] = useState('');
+    const [post, setPost] = useState(null);
+
+    useEffect(() => {
+        if (!location.state?._id) return;
+        get('/posts/edit/' + location.state._id)
+            .then(r => setPost(r.data));
+    }, [location.state?._id]);
 
     if (!location.state?._id) return <Navigate to="/catalog" />;
 
-    useEffect(() => {
-        get('/posts/edit/' + location.state._id)
-            .then(r => setPost(r.data));
-    }, [])
     return (
         <div className="createPage">
             <PostForm
                 button='Edit Now'
                 legend='Edit Photo'
                 action='edit'
-                name={post.name}
-                description={post.description}
-                path={'/posts/edit/' + post._id}
+                name={post?.name}
+                description={post?.description}
+                path={'/posts/edit/' + post?._id}
             />
         </div>
     )

@@ -20,7 +20,7 @@ export const getAllPosts = async (req, res) => {
       const { _id, name, image, description, date, likes, userid, likedBy } = post;
       const isLiked = likedBy.some(id => id.toString() === req.session.userid);
 
-      const user = allUsers.filter(u => u._id.toString() === post.userid.toString());
+      const user = allUsers.find(u => u._id.toString() === post.userid.toString());
       const last = {
         _id,
         name,
@@ -31,14 +31,14 @@ export const getAllPosts = async (req, res) => {
         userid,
         liked: isLiked,
         likedBy,
-        username: user[0].username,
-        userimage: user[0].userimage,
+        username: user?.username ?? '[deleted]',
+        userimage: user?.userimage ?? '',
       }
       return last;
     })
     res.status(200).send({
       posts: finalResult,
-      currenPage: page,
+      currentPage: page,
       totalPages: Math.ceil(postCount / limit),
       totalPostsCount: postCount
     });
@@ -59,41 +59,33 @@ export const getTopPosts = async (req, res) => {
   }
 }
 
-export const createNewPost = (req, res) => {
-
+export const createNewPost = async (req, res) => {
   try {
-    cloudinary.uploader.upload(req.file.path, function (err, result) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({
-          success: false,
-          message: "Error"
-        })
-      }
-    }).then(result => {
-      Post.create({
-        name: req.body.name,
-        image: result.url,
-        public_id: result.public_id,
-        description: req.body.description,
-        date: Date.now(),
-        likes: 0,
-        userid: req.session.userid
-      })
-
-      res.status(200).send({ message: 'Successfully created new post!' });
+    const result = await cloudinary.uploader.upload(req.file.path);
+    await Post.create({
+      name: req.body.name,
+      image: result.url,
+      public_id: result.public_id,
+      description: req.body.description,
+      date: Date.now(),
+      likes: 0,
+      userid: req.session.userid
     });
-
+    res.status(201).send({ message: 'Successfully created new post!' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to upload image' });
+    res.status(500).json({ error: 'Failed to create post' });
   }
 }
 
 export const getToEditPost = async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await Post.findById({ _id: id });
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).send({ message: 'Post not found' });
+    }
 
     if (post.userid.toString() !== req.session.userid.toString()) {
       return res.status(403).send({ message: 'You don\'t have permission to edit this post' });
@@ -119,20 +111,23 @@ export const editPost = async (req, res) => {
       return res.status(403).send({ message: 'You don\'t have permission to edit this post' });
     }
 
-    const result = await cloudinary.uploader.upload(req.file.path);
-    if (post.public_id) {
-      await cloudinary.uploader.destroy(post.public_id);
+    let imageUpdate = {};
+    let oldPublicId = null;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUpdate = { image: result.url, public_id: result.public_id };
+      oldPublicId = post.public_id;
     }
-    const updated = await Post.findByIdAndUpdate(
+
+    await Post.findByIdAndUpdate(
       post._id,
-      {
-        name: req.body.name,
-        image: result.url,
-        public_id: result.public_id,
-        description: req.body.description
-      },
+      { name: req.body.name, description: req.body.description, ...imageUpdate },
       { new: true }
     );
+
+    if (oldPublicId) {
+      await cloudinary.uploader.destroy(oldPublicId);
+    }
 
     res.status(200).send({ message: 'Successfully edited the post!' });
 
@@ -145,20 +140,23 @@ export const deletePost = async (req, res) => {
   const { _id } = req.body;
   try {
     const post = await Post.findById(_id);
-    const postUser = post.userid.toString();
 
-    if (req.session.userid !== postUser) {
+    if (!post) {
+      return res.status(404).send({ message: 'Post not found' });
+    }
+
+    if (req.session.userid !== post.userid.toString()) {
       return res.status(403).send({ message: 'You don\'t have permission to delete this post' });
     }
 
     const deleted = await Post.findByIdAndDelete(_id);
 
-    cloudinary.uploader
-      .destroy(deleted.public_id)
-      .then(result => console.log(result));
+    if (deleted.public_id) {
+      await cloudinary.uploader.destroy(deleted.public_id);
+    }
     res.status(200).send({ message: 'Successfully deleted!' });
   } catch (err) {
-    res.status(500).send({ message: err });
+    res.status(500).send({ message: err.message });
   }
 }
 
@@ -210,7 +208,7 @@ export const getProfile = async (req, res) => {
     // Check if the requesting user is the profile owner
     const isItOwner = req.session.userid === id;
 
-    const totalPosts = await Post.find({ userid: id });
+    const totalPosts = await Post.countDocuments({ userid: id });
     const paginatedPosts = await Post.find({ userid: id })
       .sort({ date: -1 })
       .skip(skip)
@@ -236,8 +234,8 @@ export const getProfile = async (req, res) => {
     res.status(200).send({
       usersPosts: finalPosts,
       currentPage: page,
-      totalPosts: totalPosts.length,
-      totalPages: Math.ceil(totalPosts.length / limit),
+      totalPosts: totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
       owner: isItOwner
     });
   } catch (err) {

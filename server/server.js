@@ -3,8 +3,6 @@ import express, { urlencoded } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import mongoSanitize from 'express-mongo-sanitize';
-import rateLimit from 'express-rate-limit';
-
 import * as db from './utils/db.js'
 import userRoutes from './user/router.js'
 import postsRoutes from './posts/router.js'
@@ -54,8 +52,14 @@ app.use(cors({
 app.use(express.json({ limit: '1mb' }));
 app.use(urlencoded({ extended: true, limit: '1mb' }));
 
-// Block NoSQL injection: strips $ and . from req.body, req.query, req.params
-app.use(mongoSanitize());
+// Block NoSQL injection — sanitize in-place (Express 5 req.query is a read-only getter,
+// but mutating the object it points to works fine).
+app.use((req, res, next) => {
+    if (req.body) mongoSanitize.sanitize(req.body);
+    if (req.params) mongoSanitize.sanitize(req.params);
+    if (req.query) mongoSanitize.sanitize(req.query);
+    next();
+});
 
 app.use(enableSessions());
 
@@ -63,22 +67,6 @@ app.use((req, res, next) => {
     if (isProd) return next();
     console.log(new Date().toLocaleTimeString(), req.method, req.path);
     next();
-});
-
-export const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 20,
-    message: { message: 'Too many attempts, please try again in 15 minutes' },
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-
-export const commentLimiter = rateLimit({
-    windowMs: 60 * 1000,
-    max: 10,
-    message: { message: 'Too many comments, slow down' },
-    standardHeaders: true,
-    legacyHeaders: false,
 });
 
 app.use('/user', userRoutes);

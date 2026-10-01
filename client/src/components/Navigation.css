@@ -100,6 +100,21 @@ header {
   font-size: 0.7em;
 }
 
+.nav-logout-btn {
+  display: block;
+  width: 100%;
+  background: #eeeaea;
+  color: black;
+  border: none;
+  border-radius: 0.2em;
+  padding: 0.5em 0;
+  font-weight: bold;
+  font-size: 13px;
+  text-shadow: 0.9px 0.9px #d6cfcf;
+  cursor: pointer;
+  font-family: inherit;
+}
+
 
 @media (min-width: 450px) {
   header {
@@ -169,6 +184,12 @@ header {
   .nav-list-items li a {
     background-color: white;
     padding: 0.2em;
+  }
+
+  .nav-logout-btn {
+    background-color: white;
+    padding: 0.2em;
+    font-size: inherit;
   }
 }
 

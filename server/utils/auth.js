@@ -1,7 +1,6 @@
 import session from 'express-session';
 import mongoose from "mongoose";
 import MongoStore from 'connect-mongo';
-import { getUser } from '../user/controller.js';
 
 const isProd = process.env.NODE_ENV === 'production';
 

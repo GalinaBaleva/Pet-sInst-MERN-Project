@@ -3,8 +3,7 @@ import dateFormat from 'dateformat';
 import './Post.css'
 import { get, post } from '../shared/utils/api';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Comment from './Comment';
 
 
@@ -13,6 +12,7 @@ const Post = (props) => {
     const [text, setText] = useState('');
     const [comments, setComments] = useState([]);
     const [showAllComments, setShowAllComments] = useState(false);
+    const [liking, setLiking] = useState(false);
     const {
         description,
         image,
@@ -28,14 +28,13 @@ const Post = (props) => {
         likesClickHandler,
         afterDeleteHandler
     } = props;
-    const isLikedByUser = likedBy.filter((f) => userid === f ).length;
 
 
     const fetchComments = async () => {
         const response = await get(`/posts/comment/${_id}`);
 
-        if (response.status !== 200) {
-            return console.log(response.data.message);
+        if (response.error || response.status !== 200) {
+            return console.log(response.error);
         }
 
         setComments(response.data.comments);
@@ -60,7 +59,7 @@ const Post = (props) => {
         }
     }
 
-    const edetHandler = () => {
+    const editHandler = () => {
         navigation('/edit', { state: { _id } });
     }
 
@@ -76,19 +75,26 @@ const Post = (props) => {
             comment: text
         });
 
-        if (response.status !== 200) {
-            console.log(response.data.message);
+        if (response.error || response.status !== 200) {
+            console.log(response.error);
             return;
         }
         fetchComments();
         setText('');
     }
 
+    const handleLikeClick = async () => {
+        if (liking) return;
+        setLiking(true);
+        await likesClickHandler(_id);
+        setLiking(false);
+    };
+
     const toggleComments = () => {
         setShowAllComments(prev => !prev);
     }
 
-    const commentsToDisplay = showAllComments ? comments : [...comments].reverse().slice(-1);
+    const commentsToDisplay = showAllComments ? comments : comments.slice(0, 1);
 
     const onOwnerClickHandler = (e) => {
         navigation('/profile', { state: { userid } });
@@ -107,7 +113,7 @@ const Post = (props) => {
                             ? <>
                                 <i
                                     className="fa-solid fa-pencil"
-                                    onClick={edetHandler}
+                                    onClick={editHandler}
                                 ></i>
                                 <i
                                     className="fa-solid fa-trash"
@@ -123,7 +129,11 @@ const Post = (props) => {
                         className="post-likes"
                     >
                         {login
-                            && <i className={!liked ? "fa-regular fa-heart" : "fa-solid fa-heart"} onClick={likesClickHandler.bind(null, _id)}></i>
+                            && <i
+                                className={!liked ? "fa-regular fa-heart" : "fa-solid fa-heart"}
+                                onClick={handleLikeClick}
+                                style={{ opacity: liking ? 0.5 : 1, cursor: liking ? 'default' : 'pointer' }}
+                            ></i>
                         }
                     </div>
                     <div className="post-likes-count">{likes}</div>

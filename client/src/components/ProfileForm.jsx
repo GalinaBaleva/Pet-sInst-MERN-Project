@@ -53,12 +53,11 @@ const ProfileForm = (props) => {
                 });
 
             } else {
-                setErrMessage(response);
+                setErrMessage(response.error || 'Something went wrong');
             }
 
         } else if (input === 'image') {
             formData.append('image', image);
-            formData.append('id', _id);
 
             const response = await fetch(import.meta.env.VITE_API_URL + '/user/profile/edit-image', {
                 credentials: 'include',

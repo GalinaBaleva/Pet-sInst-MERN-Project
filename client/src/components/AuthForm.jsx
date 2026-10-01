@@ -27,16 +27,16 @@ const AuthForm = (props) => {
         if (textFields.username.length < 3) {
             setErrormsg('User name is to short');
             return;
-        } else if (textFields.password.length < 4) {
-            setErrormsg('User password is to short');
+        } else if (textFields.password.length < 8) {
+            setErrormsg('Password must be at least 8 characters');
             return;
         }
 
         const response = await post(props.action, textFields);
 
 
-        if (!response.status || response.status !== 200) {
-            setErrormsg(response);
+        if (response.error || !response.status) {
+            setErrormsg(response.error || 'Something went wrong');
             return;
         }
 
@@ -70,7 +70,7 @@ const AuthForm = (props) => {
                             required
                         />
                     </div>
-                    {props.action === '/user/singup' && <div className="input-wrapper">
+                    {props.action === '/user/signup' && <div className="input-wrapper">
                         <input
                             type="password"
                             name="repeatPassword"

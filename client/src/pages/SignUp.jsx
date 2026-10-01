@@ -1,17 +1,17 @@
 import AuthForm from '../components/AuthForm';
 
-const SingUp = () => {
+const SignUp = () => {
     return (
         <>
             <AuthForm
-                buttontext='Sing Up'
-                action='/user/singup'
+                buttontext='Sign Up'
+                action='/user/signup'
                 fieldset='Create an Account'
                 spanLink='/login'
-                span='sing in'
+                span='sign in'
             />
         </>
     )
 }
 
-export default SingUp;
+export default SignUp;

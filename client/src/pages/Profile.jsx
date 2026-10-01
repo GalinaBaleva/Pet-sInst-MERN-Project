@@ -16,19 +16,18 @@ const Profile = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPostsCount, setTotalPostsCount] = useState('');
     const [hasMore, setHasMore] = useState(true);
-    const lacation = useLocation('');
+    const location = useLocation('');
     const sessionUserId = useSelector(state => state.userid);
 
-    const currrentId = lacation.state ? lacation.state.userid : sessionUserId;
+    const currrentId = location.state ? location.state.userid : sessionUserId;
 
 
     useEffect(() => {
         fetchData(currentPage);
     }, []);
 
-    const fetchData = async (pageToLoad) => {
+    const fetchData = async (pageToLoad, reset = false) => {
         try {
-
             const userResponse = await get(`/user/profile?userid=${currrentId}`);
             if (userResponse.data) {
                 setUser(userResponse.data);
@@ -39,10 +38,9 @@ const Profile = () => {
                     setTotalPostsCount(postsResponse.data.totalPosts);
 
                     setPosts(prevPosts => {
-                        const allPosts = [...prevPosts, ...newPosts];
-
-                        const uniquePost = Array.from(new Map(allPosts.map(post => [post._id, post])).values());
-                        return uniquePost;
+                        const base = reset ? [] : prevPosts;
+                        const allPosts = [...base, ...newPosts];
+                        return Array.from(new Map(allPosts.map(p => [p._id, p])).values());
                     });
                     setIsOwner(postsResponse.data.owner);
                     setHasMore(pageToLoad < postsResponse.data.totalPages);
@@ -55,27 +53,21 @@ const Profile = () => {
     }
 
     const likesClickHandler = async (_id) => {
-        try {
-            const response = await post('/posts/like/', { _id });
-            const { liked, likes } = response.data;
+        const response = await post('/posts/like/', { _id });
+        if (response.error || !response.data) return;
+        const { liked, likes } = response.data;
 
-            setPosts(prevPosts =>
-                prevPosts.map(
-                    post => post._id === _id
-                        ? { ...post, likes, liked }
-                        : post
-                )
-            );
-        } catch (err) {
-            console.log("Error liking, err");
-        }
+        setPosts(prevPosts =>
+            prevPosts.map(
+                p => p._id === _id ? { ...p, likes, liked } : p
+            )
+        );
     }
 
     const afterDeleteHandler = async () => {
-        get(`/posts/profile/${user._id}`).then(response => {
-            setPosts(response.data.usersPosts);
-            setTotalPostsCount(response.data.totalPosts);
-        }); 
+        setCurrentPage(1);
+        setHasMore(true);
+        fetchData(1, true);
     }
 
     return (

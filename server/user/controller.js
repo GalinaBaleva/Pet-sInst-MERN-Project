@@ -1,7 +1,7 @@
 import cloudinary from "../utils/cloudinary.js";
 import User, { comparePassword } from "./model/User.js";
 
-const staticImg = 'http://res.cloudinary.com/dagwnazwa/image/upload/v1747140089/r703zvrhxgsockgmthe9.png';
+const staticImg = 'https://res.cloudinary.com/dagwnazwa/image/upload/v1747140089/r703zvrhxgsockgmthe9.png';
 const staticPublicId = 'r703zvrhxgsockgmthe9';
 
 export const getUser = async (req, res) => {
@@ -31,8 +31,11 @@ function createSession(req, user) {
     req.session.username = user.username;
     req.session.userid = user._id;
 
-    req.session.save(err => {
-        if (err) console.error('Session speichern fehlgeschlagen:', err);
+    return new Promise((resolve, reject) => {
+        req.session.save(err => {
+            if (err) reject(err);
+            else resolve();
+        });
     });
 }
 
@@ -43,7 +46,7 @@ export const add = async (req, res) => {
         const userByUsername = await User.findOne({ username: username });
 
         if (userByUsername) {
-            res.status(404).send({ message: 'User already exists!' });
+            res.status(409).send({ message: 'User already exists!' });
             return;
         }
 
@@ -51,12 +54,12 @@ export const add = async (req, res) => {
             res.status(400).send({ message: 'Password must be at least 8 characters' });
             return;
         } else if (password.length > 30) {
-            res.status(404).send({ message: 'Password is to long' });
+            res.status(400).send({ message: 'Password is too long' });
             return;
         }
 
         if (password !== repeatPassword) {
-            res.status(404).send({ message: 'Password missmatch!' });
+            res.status(400).send({ message: 'Password mismatch!' });
             return;
         }
 
@@ -67,10 +70,10 @@ export const add = async (req, res) => {
             userimgid: staticPublicId,
         });
 
-        createSession(req, user);
+        await createSession(req, user);
 
-        res.status(200).send({
-            message: 'Successfully singed up!',
+        res.status(201).send({
+            message: 'Successfully signed up!',
             _id: user._id
         });
     } catch (error) {
@@ -93,7 +96,7 @@ export const login = async (req, res) => {
             return;
         }
 
-        createSession(req, user);
+        await createSession(req, user);
 
         res.status(200).send({
             message: 'Successfully logged in!',
@@ -106,9 +109,11 @@ export const login = async (req, res) => {
     }
 }
 
-export const logout = async (req, res) => {
-    req.session.destroy();
-    res.status(200).send({ message: 'Successfully logged out!' });
+export const logout = (req, res) => {
+    req.session.destroy(err => {
+        if (err) return res.status(500).send({ message: 'Logout failed' });
+        res.status(200).send({ message: 'Successfully logged out!' });
+    });
 }
 
 export const checkauth = async (req, res) => {
@@ -132,7 +137,7 @@ export const changeProfilePassword = async (req, res) => {
             const passOK = await comparePassword(oldpassword, user);
 
             if (!passOK) {
-                return res.status(404).send({ message: 'Old password mismatch!' });
+                return res.status(400).send({ message: 'Old password mismatch!' });
             }
 
             if (newpassword.length < 8) {
@@ -140,7 +145,7 @@ export const changeProfilePassword = async (req, res) => {
                 return;
 
             } else if (newpassword.length > 30) {
-                res.status(404).send({ message: 'Password is to long' });
+                res.status(400).send({ message: 'Password is too long' });
                 return;
             }
 
@@ -148,7 +153,7 @@ export const changeProfilePassword = async (req, res) => {
             await user.save();
             res.status(200).send({ message: 'Password is successfully changed!' })
         } else {
-            return res.status(404).send({ message: 'You don\'t have permission to change this password' })
+            return res.status(403).send({ message: 'You don\'t have permission to change this password' })
         }
 
     } catch (err) {
@@ -157,15 +162,23 @@ export const changeProfilePassword = async (req, res) => {
 }
 
 export const changeProfileImage = async (req, res) => {
-    const id = req.body.id[0];
+    const id = Array.isArray(req.body.id) ? req.body.id[0] : req.body.id;
+
+    if (!req.file) {
+        return res.status(400).send({ message: 'No image provided' });
+    }
 
     try {
         if (req.session.userid === id) {
             const user = await User.findById(id);
 
+            if (!user) {
+                return res.status(404).send({ message: 'User not found' });
+            }
+
             const result = await cloudinary.uploader.upload(req.file.path);
             if (!result.url && !result.public_id) {
-                return res.status(404).send({ message: 'Something went wrong!' })
+                return res.status(500).send({ message: 'Something went wrong!' })
             }
 
             if (user.userimgid !== 'r703zvrhxgsockgmthe9') {
@@ -179,7 +192,7 @@ export const changeProfileImage = async (req, res) => {
 
             res.status(200).send({ message: 'Image is successfully changed!' });
         } else {
-            return res.status(404).send({ message: 'You don\'t have permission to change this image' })
+            return res.status(403).send({ message: 'You don\'t have permission to change this image' })
         }
     } catch (err) {
         console.log(err)
