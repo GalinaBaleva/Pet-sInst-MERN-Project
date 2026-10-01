@@ -3,10 +3,14 @@ import express, { urlencoded } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import mongoSanitize from 'express-mongo-sanitize';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import * as db from './utils/db.js'
 import userRoutes from './user/router.js'
 import postsRoutes from './posts/router.js'
 import { enableSessions } from './utils/auth.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const isProd = process.env.NODE_ENV === 'production';
@@ -71,6 +75,13 @@ app.use((req, res, next) => {
 
 app.use('/user', userRoutes);
 app.use('/posts', postsRoutes);
+
+if (isProd) {
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    });
+}
 
 try {
     await db.connect();

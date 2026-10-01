@@ -1,5 +1,5 @@
 const fetchData = async (method, path, body) => {
-    const host = import.meta.env.VITE_API_URL;
+    const host = import.meta.env.VITE_API_URL || '';
     const options = {
         credentials: 'include',
         method,

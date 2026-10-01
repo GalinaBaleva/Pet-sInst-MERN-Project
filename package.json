@@ -1,4 +1,11 @@
 {
+  "name": "pets-inst",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "npm install --prefix ./server && npm install --prefix ./client && npm --prefix ./client run build",
+    "start": "node server/server.js"
+  },
   "dependencies": {
     "react-infinite-scroll-component": "^6.1.0"
   }
