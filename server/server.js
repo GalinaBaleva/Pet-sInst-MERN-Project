@@ -83,10 +83,12 @@ if (isProd) {
     });
 }
 
-try {
-    await db.connect();
-    app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
-} catch (error) {
-    console.error('MongoDB connection error:', error.message);
-    process.exit(1);
-}
+(async () => {
+    try {
+        await db.connect();
+        app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+    } catch (error) {
+        console.error('MongoDB connection error:', error.message);
+        process.exit(1);
+    }
+})();
