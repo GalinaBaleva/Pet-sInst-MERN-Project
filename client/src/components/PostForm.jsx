@@ -15,7 +15,7 @@ const PostForm = (props) => {
     if (props.name && props.description) {
       setTextFields({ ...textFields, name: props.name, description: props.description })
     }
-  }, [props]);
+  }, [props.name, props.description]);
 
   const navigate = useNavigate();
 

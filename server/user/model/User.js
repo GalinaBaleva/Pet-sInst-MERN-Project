@@ -20,9 +20,6 @@ const UserSchema = new mongoose.Schema({
     userimgid: {
         type: String,
         required: true,
-    },
-    session: {
-        type: String
     }
 });
 

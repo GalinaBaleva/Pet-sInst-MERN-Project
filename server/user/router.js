@@ -9,7 +9,7 @@ const router = Router();
 router.get('/checkauth', checkauth);
 router.post('/signup', authLimiter, add);
 router.post('/login', authLimiter, login);
-router.get('/logout', logout);
+router.post('/logout', logout);
 
 router.get('/profile', getUser);
 router.post('/profile/edit-password', requireAuth, changeProfilePassword);

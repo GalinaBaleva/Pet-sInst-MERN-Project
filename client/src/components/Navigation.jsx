@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import './Navigation.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { get } from "../shared/utils/api";
+import { post } from "../shared/utils/api";
 import { useEffect, useState } from 'react';
 
 const Navigation = (props) => {
@@ -11,7 +11,7 @@ const Navigation = (props) => {
 
     const clickHandler = async () => {
         setClosedNavIcon((toggle) => toggle = !toggle);
-        const response = await get('/user/logout');
+        const response = await post('/user/logout');
 
         if (response.status === 200) {
             dispatch({ type: 'logout' });
