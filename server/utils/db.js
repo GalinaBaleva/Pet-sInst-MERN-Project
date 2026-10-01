@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 const {DB_URL, DB_NAME} = process.env;
 
 const connect = async () => {
-    await mongoose.connect(DB_URL, { dbName: DB_NAME });
+    await mongoose.connect(DB_URL, { dbName: DB_NAME, family: 4 });
     console.log('MongoDB connected.');
 }
 

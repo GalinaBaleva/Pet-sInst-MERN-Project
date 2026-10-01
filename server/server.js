@@ -87,5 +87,4 @@ app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 db.connect().catch(error => {
     console.error('MongoDB connection error:', error.message);
-    process.exit(1);
 });
